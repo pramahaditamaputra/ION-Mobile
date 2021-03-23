@@ -4,7 +4,7 @@ import {Icon, Input} from '@ui-kitten/components';
 
 const AlertIcon = props => <Icon {...props} name="alert-circle-outline" />;
 
-const SearchInput = () => {
+const SearchInput = props => {
   const [value, setValue] = React.useState('');
   //   const [secureTextEntry, setSecureTextEntry] = React.useState(true);
 
@@ -31,7 +31,10 @@ const SearchInput = () => {
       accessoryRight={renderIcon}
       //   captionIcon={AlertIcon}
       //   secureTextEntry={secureTextEntry}
-      onChangeText={nextValue => setValue(nextValue)}
+      onChangeText={nextValue => {
+        setValue(nextValue);
+        props.onFilter(nextValue);
+      }}
     />
   );
 };

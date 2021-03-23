@@ -11,10 +11,11 @@ import {
 
 const BackIcon = props => <Icon {...props} name="arrow-back" />;
 
-const JobsDetail = ({navigation}) => {
+const JobsDetail = ({route, navigation}) => {
   const navigateBack = () => {
     navigation.goBack();
   };
+  const {id, job} = route.params;
 
   const BackAction = () => (
     <TopNavigationAction icon={BackIcon} onPress={navigateBack} />
@@ -29,7 +30,7 @@ const JobsDetail = ({navigation}) => {
       />
       <Divider />
       <Layout style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-        <Text category="h1">Jobs Detail</Text>
+        <Text category="h1">{job}</Text>
       </Layout>
     </SafeAreaView>
   );

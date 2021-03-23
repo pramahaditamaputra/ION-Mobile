@@ -35,13 +35,13 @@ const Router = () => {
   return (
     <Stack.Navigator headerMode="none" initialRouteName="Jobs">
       <Stack.Screen
-        name="Splash"
-        component={Splash}
+        name="MainApp"
+        component={MainApp}
         options={{headerShown: false}}
       />
       <Stack.Screen
-        name="MainApp"
-        component={MainApp}
+        name="Splash"
+        component={Splash}
         options={{headerShown: false}}
       />
       <Stack.Screen
