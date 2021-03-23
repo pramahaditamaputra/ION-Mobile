@@ -11,7 +11,7 @@ import {
 
 const BackIcon = props => <Icon {...props} name="arrow-back" />;
 
-export const DetailsScreen = ({navigation}) => {
+export const ExamplePageBackTopNavigation = ({navigation}) => {
   const navigateBack = () => {
     navigation.goBack();
   };
