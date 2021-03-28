@@ -35,7 +35,7 @@ const MainApp = () => {
 
 const Router = () => {
   return (
-    <Stack.Navigator headerMode="none" initialRouteName="Jobs">
+    <Stack.Navigator headerMode="none" initialRouteName="Login">
       <Stack.Screen
         name="MainApp"
         component={MainApp}
