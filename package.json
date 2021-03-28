@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@eva-design/eva": "^2.0.0",
+    "@react-native-community/audio-toolkit": "^2.0.3",
     "@react-native-community/masked-view": "^0.1.10",
     "@react-navigation/bottom-tabs": "^5.11.8",
     "@react-navigation/native": "^5.9.3",
@@ -25,7 +26,8 @@
     "react-native-safe-area-context": "^3.2.0",
     "react-native-screens": "^2.18.1",
     "react-native-svg": "^9.13.6",
-    "react-native-tts": "^4.0.0"
+    "react-native-tts": "^4.0.0",
+    "react-native-video": "^5.1.1"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",

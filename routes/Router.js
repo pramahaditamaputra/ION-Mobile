@@ -15,6 +15,7 @@ import Splash from '../pages/Splash';
 import InterviewsDetail from '../pages/InterviewsDetail';
 import ResultsDetail from '../pages/ResultsDetail';
 import RecordInterview from '../pages/RecordInterview';
+import RecordInterviewResult from '../pages/RecordInterviewResult';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -73,6 +74,11 @@ const Router = () => {
       <Stack.Screen
         name="RecordInterview"
         component={RecordInterview}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="RecordInterviewResult"
+        component={RecordInterviewResult}
         options={{headerShown: false}}
       />
     </Stack.Navigator>

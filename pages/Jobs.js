@@ -118,10 +118,10 @@ const Jobs = ({navigation}) => {
           justifyContent: 'space-evenly',
         }}>
         <Text style={styles.text} category="h1">
-          Job List
+          Jobs
         </Text>
         <Text style={styles.text} category="h6">
-          Find your job
+          Find your dream job
         </Text>
         <SearchInput onFilter={data => filterData(data)} />
       </Layout>
