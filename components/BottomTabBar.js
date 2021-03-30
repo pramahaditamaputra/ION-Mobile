@@ -14,6 +14,7 @@ const ProfileIcon = props => <Icon {...props} name="person-outline" />;
 const BottomTabBar = ({navigation, state}) => {
   return (
     <BottomNavigation
+      // appearance="noIndicator"
       style={styles.bottomNavigation}
       selectedIndex={state.index}
       onSelect={index => navigation.navigate(state.routeNames[index])}>
@@ -28,6 +29,7 @@ const BottomTabBar = ({navigation, state}) => {
 const styles = StyleSheet.create({
   bottomNavigation: {
     // marginVertical: 8,
+    // activeBackgroundColor: 'tomato',
   },
 });
 

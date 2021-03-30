@@ -3,6 +3,8 @@ import React, {useEffect, useState} from 'react';
 import {StyleSheet} from 'react-native';
 import {RNCamera} from 'react-native-camera';
 import Tts from 'react-native-tts';
+import {utils} from '@react-native-firebase/app';
+import storage from '@react-native-firebase/storage';
 
 const PendingView = () => (
   <Layout
@@ -33,6 +35,7 @@ const RecordInterview = ({navigation}) => {
   const [isInterviewStart, setIsInterviewStart] = useState(false);
   const [isReady, setIsReady] = useState(false);
   const [questionCounter, setQuestionCounter] = useState(0);
+  // const [reference, setReference] = useState('');
 
   const nextQuestion = async () => {
     if (isInterviewStart === false) {
@@ -51,7 +54,12 @@ const RecordInterview = ({navigation}) => {
     Tts.speak('Please press the start button to start the interview.');
     // Tts.speak(bankQuestion[questionCounter].question);
     // setQuestionCounter(questionCounter + 1);
-    const {uri, codec = 'mp4'} = await camera.recordAsync();
+    const {uri, codec = 'mp4'} = await camera.recordAsync({
+      quality: RNCamera.Constants.VideoQuality['4:3'],
+      videoBitrate: 0.3 * 1000 * 1000,
+      orientation: 'portrait',
+      mirrorVideo: true,
+    });
     const type = `video/${codec}`;
     const data = new FormData();
     data.append('video', {
@@ -59,19 +67,32 @@ const RecordInterview = ({navigation}) => {
       type,
       uri,
     });
+    //Set FileName
+    let reference = storage().ref(`userid`);
+    //Upload File
+    let task = reference.putFile(uri);
+    task.on('state_changed', taskSnapshot => {
+      console.log(
+        `${
+          (taskSnapshot.bytesTransferred / taskSnapshot.totalBytes) * 100
+        }% transferred out of ${taskSnapshot.totalBytes}`,
+      );
+    });
+    task.then(() => {
+      console.log('Video uploaded to the bucket!');
+      navigation.replace('MainApp');
+    });
 
-    console.log(data);
-
-    try {
-      // await fetch(ENDPOINT, {
-      //   method: 'post',
-      //   body: data,
-      // });
-      // console.log(data);
-      navigation.navigate('RecordInterviewResult', {uri: uri});
-    } catch (e) {
-      console.error(e);
-    }
+    // try {
+    //   // await fetch(ENDPOINT, {
+    //   //   method: 'post',
+    //   //   body: data,
+    //   // });
+    //   // console.log(data);
+    //   navigation.navigate('RecordInterviewResult', {uri: uri});
+    // } catch (e) {
+    //   console.error(e);
+    // }
   };
 
   const stopRecording = camera => {

@@ -24,6 +24,7 @@ const SearchInput = props => {
 
   return (
     <Input
+      style={{borderRadius: 100}}
       value={value}
       //   label="Password"
       placeholder="Search Job Name .."

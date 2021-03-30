@@ -50,12 +50,6 @@ const Interviews = ({navigation}) => {
       jobDescription: 'AI Engineer',
       jobApplyDueDate: '05 December 2021',
     },
-    {
-      id: 6,
-      jobName: 'Big Data Engineer',
-      jobDescription: 'Big Data Engineer',
-      jobApplyDueDate: '06 December 2021',
-    },
   ];
 
   const [jobs, setJobs] = useState([
@@ -89,12 +83,6 @@ const Interviews = ({navigation}) => {
       jobDescription: 'AI Engineer',
       jobApplyDueDate: '05 December 2021',
     },
-    {
-      id: 6,
-      jobName: 'Big Data Engineer',
-      jobDescription: 'Big Data Engineer',
-      jobApplyDueDate: '06 December 2021',
-    },
   ]);
 
   const filterData = data => {
@@ -112,10 +100,12 @@ const Interviews = ({navigation}) => {
       <Layout
         style={{
           padding: 10,
-          backgroundColor: '#3366FF',
-          height: 200,
+          backgroundColor: '#6155a6',
+          height: 175,
           flexDirection: 'column',
           justifyContent: 'space-evenly',
+          // borderBottomLeftRadius: 30,
+          borderBottomRightRadius: 35,
         }}>
         <Text style={styles.text} category="h1">
           Interviews
