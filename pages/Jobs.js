@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {SafeAreaView, StyleSheet, ScrollView} from 'react-native';
 import {
   Button,
@@ -10,6 +10,7 @@ import {
 } from '@ui-kitten/components';
 import SearchInput from '../components/SearchInput';
 import Cards from '../components/Cards';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Jobs = ({navigation}) => {
   const navigateDetails = (id, job) => {
@@ -94,6 +95,22 @@ const Jobs = ({navigation}) => {
       setJobs(bankData);
     }
   };
+
+  const getData = async () => {
+    try {
+      const value = await AsyncStorage.getItem('uid');
+      if (value !== null) {
+        // value previously stored
+        console.log(value);
+      }
+    } catch (e) {
+      // error reading value
+    }
+  };
+
+  useEffect(() => {
+    getData();
+  }, []);
 
   return (
     <SafeAreaView style={{flex: 1}}>

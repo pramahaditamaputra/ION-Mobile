@@ -41,6 +41,7 @@ import {
 } from '@ui-kitten/components';
 import Logo from '../assets/images/login.svg';
 import Gap from '../components/Gap';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Login = ({navigation}) => {
   // Set an initializing state whilst Firebase connects
@@ -60,9 +61,25 @@ const Login = ({navigation}) => {
     </TouchableWithoutFeedback>
   );
 
+  const storeData = async (uid, email) => {
+    try {
+      await AsyncStorage.setItem('uid', uid);
+      await AsyncStorage.setItem('email', email);
+    } catch (e) {
+      // saving error
+      console.log(e);
+    }
+  };
+
   // Handle user state changes
   function onAuthStateChanged(user) {
     setUser(user);
+    console.log(user);
+    if (!user) {
+      storeData('', '');
+    } else {
+      storeData(user.uid, user.email);
+    }
     if (initializing) setInitializing(false);
   }
 

@@ -5,6 +5,7 @@ import {RNCamera} from 'react-native-camera';
 import Tts from 'react-native-tts';
 import {utils} from '@react-native-firebase/app';
 import storage from '@react-native-firebase/storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const PendingView = () => (
   <Layout
@@ -35,6 +36,7 @@ const RecordInterview = ({navigation}) => {
   const [isInterviewStart, setIsInterviewStart] = useState(false);
   const [isReady, setIsReady] = useState(false);
   const [questionCounter, setQuestionCounter] = useState(0);
+  const [uid, setUid] = useState('');
   // const [reference, setReference] = useState('');
 
   const nextQuestion = async () => {
@@ -68,7 +70,7 @@ const RecordInterview = ({navigation}) => {
       uri,
     });
     //Set FileName
-    let reference = storage().ref(`userid`);
+    let reference = storage().ref(`${uid}`);
     //Upload File
     let task = reference.putFile(uri);
     task.on('state_changed', taskSnapshot => {
@@ -82,17 +84,6 @@ const RecordInterview = ({navigation}) => {
       console.log('Video uploaded to the bucket!');
       navigation.replace('MainApp');
     });
-
-    // try {
-    //   // await fetch(ENDPOINT, {
-    //   //   method: 'post',
-    //   //   body: data,
-    //   // });
-    //   // console.log(data);
-    //   navigation.navigate('RecordInterviewResult', {uri: uri});
-    // } catch (e) {
-    //   console.error(e);
-    // }
   };
 
   const stopRecording = camera => {
@@ -100,7 +91,21 @@ const RecordInterview = ({navigation}) => {
     camera.stopRecording();
   };
 
+  const getData = async () => {
+    try {
+      const value = await AsyncStorage.getItem('uid');
+      if (value !== null) {
+        setUid(value);
+        // value previously stored
+        // console.log(value);
+      }
+    } catch (e) {
+      // error reading value
+    }
+  };
+
   useEffect(() => {
+    getData();
     setIsInterviewStart(false);
     setIsReady(false);
     setQuestionCounter(0);
