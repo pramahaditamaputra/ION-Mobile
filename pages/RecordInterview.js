@@ -1,13 +1,16 @@
-import {Button, Layout, Text} from '@ui-kitten/components';
+import {Button, Layout, Spinner, Text} from '@ui-kitten/components';
 import React, {useEffect, useState} from 'react';
-import {StyleSheet} from 'react-native';
+import {StyleSheet, View} from 'react-native';
 import {RNCamera} from 'react-native-camera';
 import Tts from 'react-native-tts';
 import {utils} from '@react-native-firebase/app';
 import storage from '@react-native-firebase/storage';
+import firestore from '@react-native-firebase/firestore';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {set} from 'react-native-reanimated';
+import Gap from '../components/Gap';
 
-const PendingView = () => (
+const PendingView = props => (
   <Layout
     style={{
       flex: 1,
@@ -15,7 +18,9 @@ const PendingView = () => (
       justifyContent: 'center',
       alignItems: 'center',
     }}>
-    <Text>Waiting</Text>
+    <Spinner size="giant" />
+    <Gap height={10} />
+    <Text>{props.progress}%</Text>
   </Layout>
 );
 
@@ -24,15 +29,10 @@ const RecordInterview = ({navigation}) => {
     Tts.stop();
     navigation.goBack();
   };
-  const [bankQuestion, setBankQuestion] = useState([
-    {question: 'What is your name?'},
-    {question: 'What is your father name?'},
-    {question: 'What is your mother name?'},
-    {
-      question:
-        'Your interview has been finished. Please press the End Interview button to end the interview',
-    },
-  ]);
+
+  const [isLoading, setIsLoading] = useState(false);
+  const [progress, setProgress] = useState(0);
+  const [bankQuestion, setBankQuestion] = useState([]);
   const [isInterviewStart, setIsInterviewStart] = useState(false);
   const [isReady, setIsReady] = useState(false);
   const [questionCounter, setQuestionCounter] = useState(0);
@@ -74,13 +74,18 @@ const RecordInterview = ({navigation}) => {
     //Upload File
     let task = reference.putFile(uri);
     task.on('state_changed', taskSnapshot => {
-      console.log(
-        `${
-          (taskSnapshot.bytesTransferred / taskSnapshot.totalBytes) * 100
-        }% transferred out of ${taskSnapshot.totalBytes}`,
+      setIsLoading(true);
+      setProgress(
+        (taskSnapshot.bytesTransferred / taskSnapshot.totalBytes) * 100,
       );
+      // console.log(
+      //   `${
+      //     (taskSnapshot.bytesTransferred / taskSnapshot.totalBytes) * 100
+      //   }% transferred out of ${taskSnapshot.totalBytes}`,
+      // );
     });
     task.then(() => {
+      setIsLoading(false);
       console.log('Video uploaded to the bucket!');
       navigation.replace('MainApp');
     });
@@ -104,8 +109,26 @@ const RecordInterview = ({navigation}) => {
     }
   };
 
+  const getQuestions = async () => {
+    try {
+      const list = [];
+      var snapshot = await firestore()
+        .collection('questions')
+        .orderBy('id', 'asc')
+        .get();
+      console.log('Here');
+      snapshot.forEach(doc => {
+        list.push(doc.data());
+      });
+      setBankQuestion(list);
+    } catch (e) {
+      console.log('There is no question');
+    }
+  };
+
   useEffect(() => {
     getData();
+    getQuestions();
     setIsInterviewStart(false);
     setIsReady(false);
     setQuestionCounter(0);
@@ -132,7 +155,7 @@ const RecordInterview = ({navigation}) => {
         buttonNegative: 'Cancel',
       }}>
       {({camera, status, recordAudioPermissionStatus}) => {
-        if (status !== 'READY') return <PendingView />;
+        if (isLoading === true) return <PendingView progress={progress} />;
         return (
           <Layout
             style={{

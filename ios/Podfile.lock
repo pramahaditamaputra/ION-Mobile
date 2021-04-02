@@ -664,7 +664,7 @@ PODS:
     - RNFBApp
   - RNGestureHandler (1.10.3):
     - React-Core
-  - RNReanimated (2.0.0):
+  - RNReanimated (2.1.0):
     - DoubleConversion
     - FBLazyVector
     - FBReactNativeSpec
@@ -954,7 +954,7 @@ SPEC CHECKSUMS:
   RNFBFirestore: 49898b75f0684b56f77b7464eb46c539b015a54c
   RNFBStorage: 1e7dfba28c08d10dddbfa38b6474fcf8c0ecd3c0
   RNGestureHandler: a479ebd5ed4221a810967000735517df0d2db211
-  RNReanimated: 64f6c5789f82818c07ba3c71864b73619cb23c76
+  RNReanimated: b8c8004b43446e3c2709fe64b2b41072f87428ad
   RNScreens: f7ad633b2e0190b77b6a7aab7f914fad6f198d8d
   RNSVG: 8ba35cbeb385a52fd960fd28db9d7d18b4c2974f
   TextToSpeech: ffe83393245db2640a60fa29d710c8120cabb21a
