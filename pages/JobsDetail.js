@@ -11,6 +11,7 @@ import {
 } from '@ui-kitten/components';
 import firestore from '@react-native-firebase/firestore';
 import Gap from '../components/Gap';
+import {showMessage, hideMessage} from 'react-native-flash-message';
 
 const BackIcon = props => <Icon {...props} name="arrow-back" />;
 
@@ -46,6 +47,11 @@ const JobsDetail = ({route, navigation}) => {
       .add(data)
       .then(() => {
         console.log('Interview added!');
+        showMessage({
+          message:
+            'Success, please check on interviews tab to do the online interview!',
+          type: 'success',
+        });
         navigateBack();
       });
   };

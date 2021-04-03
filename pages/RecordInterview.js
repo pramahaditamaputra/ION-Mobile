@@ -70,7 +70,7 @@ const RecordInterview = ({navigation}) => {
       uri,
     });
     //Set FileName
-    let reference = storage().ref(`${uid}`);
+    let reference = storage().ref(`/videos/${uid}`);
     //Upload File
     let task = reference.putFile(uri);
     task.on('state_changed', taskSnapshot => {

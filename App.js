@@ -6,11 +6,13 @@ import Router from './routes/Router';
 import {NavigationContainer} from '@react-navigation/native';
 import {default as theme} from './custom-theme.json';
 import {LogBox} from 'react-native';
+import FlashMessage from 'react-native-flash-message';
 LogBox.ignoreAllLogs();
 
 const App = () => (
   <NavigationContainer>
     <Router />
+    <FlashMessage position="top" />
   </NavigationContainer>
 );
 
