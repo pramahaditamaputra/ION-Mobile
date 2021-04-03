@@ -11,84 +11,26 @@ import {
 import SearchInput from '../components/SearchInput';
 import Cards from '../components/Cards';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import firestore from '@react-native-firebase/firestore';
 
 const Jobs = ({navigation}) => {
-  const navigateDetails = (id, job) => {
+  const [bankData, setBankData] = useState([]);
+  const [jobs, setJobs] = useState([]);
+  const [userID, setUserID] = useState('');
+
+  const navigateDetails = (userID, id, name, description, duedate) => {
     navigation.navigate('JobsDetail', {
+      userID: userID,
       id: id,
-      job: job,
+      name: name,
+      description: description,
+      duedate: duedate,
     });
   };
 
-  const bankData = [
-    {
-      id: 1,
-      jobName: 'Front-End Engineer',
-      jobDescription: 'Front-End Engineer',
-      jobApplyDueDate: '01 December 2021',
-    },
-    {
-      id: 2,
-      jobName: 'Back-End Engineer',
-      jobDescription: 'Back-End Engineer',
-      jobApplyDueDate: '02 December 2021',
-    },
-    {
-      id: 3,
-      jobName: 'Full-Stack Engineer',
-      jobDescription: 'Full-Stack Engineer',
-      jobApplyDueDate: '03 December 2021',
-    },
-    {
-      id: 4,
-      jobName: 'DevOps Engineer',
-      jobDescription: 'DevOps Engineer',
-      jobApplyDueDate: '04 December 2021',
-    },
-    {
-      id: 5,
-      jobName: 'AI Engineer',
-      jobDescription: 'AI Engineer',
-      jobApplyDueDate: '05 December 2021',
-    },
-  ];
-
-  const [jobs, setJobs] = useState([
-    {
-      id: 1,
-      jobName: 'Front-End Engineer',
-      jobDescription: 'Front-End Engineer',
-      jobApplyDueDate: '01 December 2021',
-    },
-    {
-      id: 2,
-      jobName: 'Back-End Engineer',
-      jobDescription: 'Back-End Engineer',
-      jobApplyDueDate: '02 December 2021',
-    },
-    {
-      id: 3,
-      jobName: 'Full-Stack Engineer',
-      jobDescription: 'Full-Stack Engineer',
-      jobApplyDueDate: '03 December 2021',
-    },
-    {
-      id: 4,
-      jobName: 'DevOps Engineer',
-      jobDescription: 'DevOps Engineer',
-      jobApplyDueDate: '04 December 2021',
-    },
-    {
-      id: 5,
-      jobName: 'AI Engineer',
-      jobDescription: 'AI Engineer',
-      jobApplyDueDate: '05 December 2021',
-    },
-  ]);
-
   const filterData = data => {
     let currentJobs = [...jobs];
-    let newJobs = currentJobs.filter(job => job.jobName === data);
+    let newJobs = currentJobs.filter(job => job.name === data);
     if (newJobs.length > 0) {
       setJobs(newJobs);
     } else {
@@ -101,15 +43,37 @@ const Jobs = ({navigation}) => {
       const value = await AsyncStorage.getItem('uid');
       if (value !== null) {
         // value previously stored
-        console.log(value);
+        // console.log(value);
+        setUserID(value);
       }
     } catch (e) {
       // error reading value
     }
   };
 
+  const getJobs = async () => {
+    var snapshot = await firestore()
+      .collection('jobs')
+      .onSnapshot(querySnapshot => {
+        const list = [];
+        querySnapshot.forEach(doc => {
+          const {id, name, description, duedate} = doc.data();
+          list.push({
+            id: doc.id,
+            name,
+            description,
+            duedate,
+          });
+        });
+        console.log(list);
+        setJobs(list);
+        setBankData(list);
+      });
+  };
+
   useEffect(() => {
     getData();
+    getJobs();
   }, []);
 
   return (
@@ -140,9 +104,17 @@ const Jobs = ({navigation}) => {
               return (
                 <Cards
                   key={job.id}
-                  move={() => navigateDetails(job.id, job.jobName)}
-                  jobName={job.jobName}
-                  jobApplyDueDate={job.jobApplyDueDate}
+                  move={() =>
+                    navigateDetails(
+                      userID,
+                      job.id,
+                      job.name,
+                      job.description,
+                      job.duedate.seconds,
+                    )
+                  }
+                  jobName={job.name}
+                  jobApplyDueDate={Date(job.duedate.seconds)}
                 />
               );
             })}

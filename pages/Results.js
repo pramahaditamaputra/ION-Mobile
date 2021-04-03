@@ -100,12 +100,13 @@ const Results = ({navigation}) => {
       <Layout
         style={{
           padding: 10,
+          paddingBottom: 20,
           backgroundColor: '#6155a6',
           height: 175,
           flexDirection: 'column',
           justifyContent: 'space-evenly',
-          // borderBottomLeftRadius: 30,
-          borderBottomRightRadius: 35,
+          borderBottomLeftRadius: 25,
+          borderBottomRightRadius: 25,
         }}>
         <Text style={styles.text} category="h1">
           Results

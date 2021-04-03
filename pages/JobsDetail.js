@@ -9,6 +9,7 @@ import {
   TopNavigation,
   TopNavigationAction,
 } from '@ui-kitten/components';
+import firestore from '@react-native-firebase/firestore';
 import Gap from '../components/Gap';
 
 const BackIcon = props => <Icon {...props} name="arrow-back" />;
@@ -17,7 +18,37 @@ const JobsDetail = ({route, navigation}) => {
   const navigateBack = () => {
     navigation.goBack();
   };
-  const {id, job} = route.params;
+
+  const {userID, id, name, description, duedate} = route.params;
+
+  const applyJob = async () => {
+    let data = {
+      user: {
+        id: userID,
+      },
+      job: {
+        id: id,
+        name: name,
+        description: description,
+        duedate: duedate,
+      },
+      video: '',
+      status: 'Waiting for Interview',
+      result: {
+        status: 'none',
+        message: 'none',
+      },
+      applyDate: new Date(),
+    };
+
+    const insertData = await firestore()
+      .collection('interviews')
+      .add(data)
+      .then(() => {
+        console.log('Interview added!');
+        navigateBack();
+      });
+  };
 
   const BackAction = () => (
     <TopNavigationAction icon={BackIcon} onPress={navigateBack} />
@@ -52,10 +83,10 @@ const JobsDetail = ({route, navigation}) => {
           // borderBottomRightRadius: 300,
         }}>
         <Text style={{color: 'white'}} category="h1">
-          {job}
+          {name}
         </Text>
         <Text style={{color: 'white'}} category="h6">
-          Due Date Apply : 15 March 2021
+          Due Date Apply : {Date(duedate)}
         </Text>
         {/* <SearchInput onFilter={data => filterData(data)} /> */}
       </Layout>
@@ -75,10 +106,12 @@ const JobsDetail = ({route, navigation}) => {
           </Text>
           <Gap height={5} />
           <Text style={styles.text} category="h6">
-            Knowing about Machine Learning
+            {description}
           </Text>
           <Gap height={50} />
-          <Button size="medium">Apply Job</Button>
+          <Button size="medium" onPress={applyJob}>
+            Apply Job
+          </Button>
         </ScrollView>
       </Layout>
     </SafeAreaView>
