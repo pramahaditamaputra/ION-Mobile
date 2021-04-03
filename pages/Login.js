@@ -42,7 +42,7 @@ import {
 import Logo from '../assets/images/login.svg';
 import Gap from '../components/Gap';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
+import {showMessage, hideMessage} from 'react-native-flash-message';
 const Login = ({navigation}) => {
   // Set an initializing state whilst Firebase connects
   const [initializing, setInitializing] = useState(true);
@@ -92,6 +92,10 @@ const Login = ({navigation}) => {
     auth()
       .signInWithEmailAndPassword(email, password)
       .then(() => {
+        showMessage({
+          message: 'Welcome ...',
+          type: 'success',
+        });
         console.log('User signed in');
       })
       .catch(error => {
@@ -134,9 +138,7 @@ const Login = ({navigation}) => {
               value={password}
               label="Password"
               placeholder="Input Password"
-              caption="Should contain at least 8 symbols"
               accessoryRight={renderIcon}
-              captionIcon={AlertIcon}
               secureTextEntry={secureTextEntry}
               onChangeText={nextValue => setPassword(nextValue)}
             />

@@ -15,14 +15,20 @@ import {
   TopNavigation,
   Text,
   TopNavigationAction,
+  Datepicker,
 } from '@ui-kitten/components';
 import Logo from '../assets/images/register.svg';
 import Gap from '../components/Gap';
+import DocumentPicker from 'react-native-document-picker';
+
+const CalendarIcon = props => <Icon {...props} name="calendar" />;
 
 const Register = ({navigation}) => {
   const navigateBack = () => {
     navigation.goBack();
   };
+
+  const [date, setDate] = React.useState(new Date());
 
   const BackIcon = props => <Icon {...props} name="arrow-back" />;
 
@@ -40,6 +46,27 @@ const Register = ({navigation}) => {
 
   const moveToLogin = () => {
     navigation.replace('Login');
+  };
+
+  const getCV = async () => {
+    // Pick a single file
+    try {
+      const res = await DocumentPicker.pick({
+        type: [DocumentPicker.types.pdf],
+      });
+      console.log(
+        res.uri,
+        res.type, // mime type
+        res.name,
+        res.size,
+      );
+    } catch (err) {
+      if (DocumentPicker.isCancel(err)) {
+        // User cancelled the picker, exit any dialogs or menus and move on
+      } else {
+        throw err;
+      }
+    }
   };
 
   const renderIcon = props => (
@@ -74,9 +101,19 @@ const Register = ({navigation}) => {
       {/* <Divider /> */}
       <Layout style={{flex: 1, padding: 25, justifyContent: 'center'}}>
         <ScrollView showsVerticalScrollIndicator={false}>
-          <Layout style={{marginVertical: 75}}>
+          <Layout style={{marginVertical: 65}}>
             <Logo style={{maxWidth: '100%'}} height={175} />
           </Layout>
+          <Input size="large" label="Fullname" placeholder="Input Fullname" />
+          <Gap height={10} />
+          <Datepicker
+            label="DOB"
+            placeholder="Pick Date"
+            date={date}
+            onSelect={nextDate => setDate(nextDate)}
+            accessoryRight={CalendarIcon}
+          />
+          <Gap height={10} />
           <Input
             size="large"
             label="Email"
@@ -90,12 +127,18 @@ const Register = ({navigation}) => {
             value={password}
             label="Password"
             placeholder="Input Password"
-            caption="Should contain at least 8 symbols"
             accessoryRight={renderIcon}
-            captionIcon={AlertIcon}
             secureTextEntry={secureTextEntry}
             onChangeText={nextValue => setPassword(nextValue)}
           />
+          <Gap height={10} />
+          <Layout
+            style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+            <Button size="small" onPress={getCV}>
+              Upload CV
+            </Button>
+            <Text>NamaFileCV.pdf</Text>
+          </Layout>
           <Gap height={50} />
           <Button onPress={signUp}>Register</Button>
           <Layout
