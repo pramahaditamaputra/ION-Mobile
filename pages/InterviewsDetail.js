@@ -20,8 +20,8 @@ const InterviewsDetail = ({route, navigation}) => {
     navigation.goBack();
   };
 
-  const navigateGoInterview = (id, job) => {
-    navigation.navigate('RecordInterview');
+  const navigateGoInterview = id => {
+    navigation.navigate('RecordInterview', {id: id});
   };
 
   const BackAction = () => (
@@ -83,7 +83,11 @@ const InterviewsDetail = ({route, navigation}) => {
             {description}
           </Text>
           <Gap height={50} />
-          <Button size="medium" onPress={navigateGoInterview}>
+          <Button
+            size="medium"
+            onPress={() => {
+              navigateGoInterview(id);
+            }}>
             Start Interview
           </Button>
         </ScrollView>

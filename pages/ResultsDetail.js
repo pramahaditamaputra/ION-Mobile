@@ -15,12 +15,12 @@ import Gap from '../components/Gap';
 const BackIcon = props => <Icon {...props} name="arrow-back" />;
 
 const ResultsDetail = ({route, navigation}) => {
-  const {id, job} = route.params;
+  const {userID, id, name, description, duedate} = route.params;
   const navigateBack = () => {
     navigation.goBack();
   };
 
-  const navigateGoInterview = (id, job) => {
+  const navigateGoInterview = id => {
     navigation.navigate('RecordInterview');
   };
 
@@ -57,10 +57,10 @@ const ResultsDetail = ({route, navigation}) => {
           // borderBottomRightRadius: 300,
         }}>
         <Text style={{color: 'white'}} category="h1">
-          {job}
+          {name}
         </Text>
         <Text style={{color: 'white'}} category="h6">
-          Interview Date : 20 March 2020
+          Interview Date : {Date(duedate)}
         </Text>
         {/* <SearchInput onFilter={data => filterData(data)} /> */}
       </Layout>

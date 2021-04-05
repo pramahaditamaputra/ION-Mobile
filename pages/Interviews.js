@@ -10,7 +10,7 @@ import {
 } from '@ui-kitten/components';
 import SearchInput from '../components/SearchInput';
 import Cards from '../components/Cards';
-import {AsyncStorage} from '@react-native-async-storage/async-storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import firestore from '@react-native-firebase/firestore';
 
 const Interviews = ({navigation}) => {
@@ -45,15 +45,19 @@ const Interviews = ({navigation}) => {
         // value previously stored
         // console.log(value);
         setUserID(value);
+        getInterviews(value);
       }
     } catch (e) {
       // error reading value
+      console.log(e);
     }
   };
 
-  const getInterviews = async () => {
+  const getInterviews = async userID => {
     var snapshot = await firestore()
       .collection('interviews')
+      .where('user.id', '==', userID)
+      .where('status', '==', 'Waiting for Interview')
       .onSnapshot(querySnapshot => {
         const list = [];
         querySnapshot.forEach(doc => {
@@ -77,7 +81,7 @@ const Interviews = ({navigation}) => {
 
   useEffect(() => {
     getData();
-    getInterviews();
+    // getInterviews(userID);
   }, []);
 
   return (
@@ -119,7 +123,7 @@ const Interviews = ({navigation}) => {
                     )
                   }
                   jobName={interview.job.name}
-                  jobApplyDueDate={interview.job.duedate}
+                  jobApplyDueDate={Date(interview.job.duedate.seconds)}
                 />
               );
             })}

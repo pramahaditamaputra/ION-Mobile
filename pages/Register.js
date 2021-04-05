@@ -3,6 +3,8 @@ import {
   TouchableWithoutFeedback,
   ScrollView,
   TouchableOpacity,
+  Platform,
+  PermissionsAndroid,
 } from 'react-native';
 import auth from '@react-native-firebase/auth';
 import {SafeAreaView} from 'react-native';
@@ -20,6 +22,11 @@ import {
 import Logo from '../assets/images/register.svg';
 import Gap from '../components/Gap';
 import DocumentPicker from 'react-native-document-picker';
+import storage from '@react-native-firebase/storage';
+import {utils} from '@react-native-firebase/app';
+import RNFetchBlob from 'rn-fetch-blob';
+import * as RNFS from 'react-native-fs';
+import firestore from '@react-native-firebase/firestore';
 
 const CalendarIcon = props => <Icon {...props} name="calendar" />;
 
@@ -29,6 +36,7 @@ const Register = ({navigation}) => {
   };
 
   const [date, setDate] = React.useState(new Date());
+  const [cv, setCV] = React.useState('');
 
   const BackIcon = props => <Icon {...props} name="arrow-back" />;
 
@@ -36,6 +44,8 @@ const Register = ({navigation}) => {
     <TopNavigationAction icon={BackIcon} onPress={navigateBack} />
   );
 
+  const [fullname, setFullname] = useState('');
+  const [dob, setDob] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [secureTextEntry, setSecureTextEntry] = useState(true);
@@ -46,6 +56,45 @@ const Register = ({navigation}) => {
 
   const moveToLogin = () => {
     navigation.replace('Login');
+  };
+
+  const requestPermission = async () => {
+    try {
+      const granted = await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
+        {
+          title: 'Files Permission',
+          message:
+            'App needs access to your files ' +
+            'so you can run face detection.',
+          buttonNeutral: 'Ask Me Later',
+          buttonNegative: 'Cancel',
+          buttonPositive: 'OK',
+        },
+      );
+      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+        console.log('We can now read files');
+      } else {
+        console.log('File read permission denied');
+      }
+      return granted;
+    } catch (err) {
+      console.warn(err);
+    }
+  };
+
+  useEffect(() => {
+    requestPermission();
+  });
+
+  const convertUri = async uri => {
+    const split = uri.split('/');
+    const name = split.pop();
+    const inbox = split.pop();
+    const realPath = `${RNFS.TemporaryDirectoryPath}${inbox}/${name}`;
+    // const stat = await RNFetchBlob.fs.stat(realPath);
+    // console.log(`ANJING ${realPath}`);
+    // return realPath;
   };
 
   const getCV = async () => {
@@ -60,6 +109,39 @@ const Register = ({navigation}) => {
         res.name,
         res.size,
       );
+      const split = res.uri.split('/');
+      const name = split.pop();
+      const inbox = split.pop();
+      const realPath = `${RNFS.TemporaryDirectoryPath}${inbox}/${name}`;
+      const stat = await RNFetchBlob.fs.readFile(res.uri, 'base64');
+
+      // const uri = convertUri(res.uri);
+      // console.log(`bangsat ${stat}`);
+      // console.log(`Path ${uri}`);
+
+      // const pathToFile = `${utils.FilePath.TEMP_DIRECTORY}/name`;
+
+      // //Set FileName
+      // let reference = storage().ref(`/cv/hadi`);
+      // //Upload File
+      // let task = reference.putString(stat, 'base64');
+      // task.on('state_changed', taskSnapshot => {
+      //   // setIsLoading(true);
+      //   // setProgress(
+      //   //   (taskSnapshot.bytesTransferred / taskSnapshot.totalBytes) * 100,
+      //   // );
+      //   console.log(
+      //     `${
+      //       (taskSnapshot.bytesTransferred / taskSnapshot.totalBytes) * 100
+      //     }% transferred out of ${taskSnapshot.totalBytes}`,
+      //   );
+      // });
+      // task.then(async () => {
+      //   const url = await storage().ref(`/cv/${res.name}`).getDownloadURL();
+      //   console.log(url);
+      // });
+
+      setCV(stat);
     } catch (err) {
       if (DocumentPicker.isCancel(err)) {
         // User cancelled the picker, exit any dialogs or menus and move on
@@ -78,9 +160,39 @@ const Register = ({navigation}) => {
   const signUp = () => {
     auth()
       .createUserWithEmailAndPassword(email, password)
-      .then(() => {
-        console.log('User account created & signed in!');
-        moveToLogin();
+      .then(res => {
+        // console.log(res.user.uid);
+        const uid = res.user.uid;
+        const uri = cv;
+
+        //Set FileName
+        let reference = storage().ref(`/cv/${uid}`);
+        //Upload File
+        let task = reference.putString(uri, 'base64');
+        task.on('state_changed', taskSnapshot => {
+          // setIsLoading(true);
+          // setProgress(
+          //   (taskSnapshot.bytesTransferred / taskSnapshot.totalBytes) * 100,
+          // );
+          console.log(
+            `${
+              (taskSnapshot.bytesTransferred / taskSnapshot.totalBytes) * 100
+            }% transferred out of ${taskSnapshot.totalBytes}`,
+          );
+        });
+        task.then(async () => {
+          const url = await storage().ref(`/cv/${uid}`).getDownloadURL();
+          console.log(url);
+
+          const data = {
+            uid: uid,
+            fullname: fullname,
+            dob: dob,
+            email: email,
+            cv: url,
+          };
+          firestore().collection('candidates').add(data).then(moveToLogin());
+        });
       })
       .catch(error => {
         if (error.code === 'auth/email-already-in-use') {
@@ -104,13 +216,19 @@ const Register = ({navigation}) => {
           <Layout style={{marginVertical: 65}}>
             <Logo style={{maxWidth: '100%'}} height={175} />
           </Layout>
-          <Input size="large" label="Fullname" placeholder="Input Fullname" />
+          <Input
+            size="large"
+            label="Fullname"
+            placeholder="Input Fullname"
+            value={fullname}
+            onChangeText={nextValue => setFullname(nextValue)}
+          />
           <Gap height={10} />
           <Datepicker
             label="DOB"
             placeholder="Pick Date"
-            date={date}
-            onSelect={nextDate => setDate(nextDate)}
+            date={dob}
+            onSelect={nextDate => setDob(nextDate)}
             accessoryRight={CalendarIcon}
           />
           <Gap height={10} />

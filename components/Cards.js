@@ -67,7 +67,7 @@ const Cards = props => {
           <Layout style={{flex: 1, justifyContent: 'center', marginLeft: 10}}>
             <Text category="s1">{props.jobName}</Text>
             <Text category="p2" appearance="hint">
-              Due Date Interview : {props.jobApplyDueDate}
+              Announcement Date : {props.jobApplyDueDate}
             </Text>
           </Layout>
         </Layout>

@@ -570,6 +570,8 @@ PODS:
     - React-Core
   - react-native-camera/RN (3.43.0):
     - React-Core
+  - react-native-document-picker (5.0.3):
+    - React-Core
   - react-native-safe-area-context (3.2.0):
     - React-Core
   - react-native-video (5.1.1):
@@ -643,6 +645,8 @@ PODS:
     - React-perflogger (= 0.64.0)
   - ReactNativeAudioToolkit (2.0.3):
     - React
+  - rn-fetch-blob (0.12.0):
+    - React-Core
   - RNCAsyncStorage (1.14.1):
     - React-Core
   - RNCMaskedView (0.1.10):
@@ -662,6 +666,8 @@ PODS:
     - Firebase/Storage (= 7.9.0)
     - React-Core
     - RNFBApp
+  - RNFS (2.16.6):
+    - React
   - RNGestureHandler (1.10.3):
     - React-Core
   - RNReanimated (1.13.3):
@@ -714,6 +720,7 @@ DEPENDENCIES:
   - React-jsiexecutor (from `../node_modules/react-native/ReactCommon/jsiexecutor`)
   - React-jsinspector (from `../node_modules/react-native/ReactCommon/jsinspector`)
   - react-native-camera (from `../node_modules/react-native-camera`)
+  - react-native-document-picker (from `../node_modules/react-native-document-picker`)
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
   - react-native-video (from `../node_modules/react-native-video`)
   - React-perflogger (from `../node_modules/react-native/ReactCommon/reactperflogger`)
@@ -729,12 +736,14 @@ DEPENDENCIES:
   - React-runtimeexecutor (from `../node_modules/react-native/ReactCommon/runtimeexecutor`)
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
   - "ReactNativeAudioToolkit (from `../node_modules/@react-native-community/audio-toolkit`)"
+  - rn-fetch-blob (from `../node_modules/rn-fetch-blob`)
   - "RNCAsyncStorage (from `../node_modules/@react-native-async-storage/async-storage`)"
   - "RNCMaskedView (from `../node_modules/@react-native-community/masked-view`)"
   - "RNFBApp (from `../node_modules/@react-native-firebase/app`)"
   - "RNFBAuth (from `../node_modules/@react-native-firebase/auth`)"
   - "RNFBFirestore (from `../node_modules/@react-native-firebase/firestore`)"
   - "RNFBStorage (from `../node_modules/@react-native-firebase/storage`)"
+  - RNFS (from `../node_modules/react-native-fs`)
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
   - RNReanimated (from `../node_modules/react-native-reanimated`)
   - RNScreens (from `../node_modules/react-native-screens`)
@@ -806,6 +815,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/jsinspector"
   react-native-camera:
     :path: "../node_modules/react-native-camera"
+  react-native-document-picker:
+    :path: "../node_modules/react-native-document-picker"
   react-native-safe-area-context:
     :path: "../node_modules/react-native-safe-area-context"
   react-native-video:
@@ -836,6 +847,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon"
   ReactNativeAudioToolkit:
     :path: "../node_modules/@react-native-community/audio-toolkit"
+  rn-fetch-blob:
+    :path: "../node_modules/rn-fetch-blob"
   RNCAsyncStorage:
     :path: "../node_modules/@react-native-async-storage/async-storage"
   RNCMaskedView:
@@ -848,6 +861,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@react-native-firebase/firestore"
   RNFBStorage:
     :path: "../node_modules/@react-native-firebase/storage"
+  RNFS:
+    :path: "../node_modules/react-native-fs"
   RNGestureHandler:
     :path: "../node_modules/react-native-gesture-handler"
   RNReanimated:
@@ -905,6 +920,7 @@ SPEC CHECKSUMS:
   React-jsiexecutor: 06a9c77b56902ae7ffcdd7a4905f664adc5d237b
   React-jsinspector: 0ae35a37b20d5e031eb020a69cc5afdbd6406301
   react-native-camera: f432fcf1b32b528bbf7c3543d3e3b1deb0c5b72a
+  react-native-document-picker: 2e6ecd112c48215e36431734d902f35201ffab0a
   react-native-safe-area-context: f0906bf8bc9835ac9a9d3f97e8bde2a997d8da79
   react-native-video: 0bb76b6d6b77da3009611586c7dbf817b947f30e
   React-perflogger: 9c547d8f06b9bf00cb447f2b75e8d7f19b7e02af
@@ -920,12 +936,14 @@ SPEC CHECKSUMS:
   React-runtimeexecutor: cad74a1eaa53ee6e7a3620231939d8fe2c6afcf0
   ReactCommon: cfe2b7fd20e0dbd2d1185cd7d8f99633fbc5ff05
   ReactNativeAudioToolkit: de9610f323e855ac6574be8c99621f3d57c5df06
+  rn-fetch-blob: f065bb7ab7fb48dd002629f8bdcb0336602d3cba
   RNCAsyncStorage: fe58eec522885718d6b297b7b658bf87d7ca557b
   RNCMaskedView: 5a8ec07677aa885546a0d98da336457e2bea557f
   RNFBApp: d9ab9f2e63c70a9974294bb44c749b728cd4028f
   RNFBAuth: 73ef569faa4618624313fbc969dfaba66bb6d0ed
   RNFBFirestore: 49898b75f0684b56f77b7464eb46c539b015a54c
   RNFBStorage: 1e7dfba28c08d10dddbfa38b6474fcf8c0ecd3c0
+  RNFS: 2bd9eb49dc82fa9676382f0585b992c424cd59df
   RNGestureHandler: a479ebd5ed4221a810967000735517df0d2db211
   RNReanimated: 514a11da3a2bcc6c3dfd9de32b38e2b9bf101926
   RNScreens: f7ad633b2e0190b77b6a7aab7f914fad6f198d8d

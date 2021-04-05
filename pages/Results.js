@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {SafeAreaView, StyleSheet, ScrollView} from 'react-native';
 import {
   Button,
@@ -10,90 +10,79 @@ import {
 } from '@ui-kitten/components';
 import SearchInput from '../components/SearchInput';
 import Cards from '../components/Cards';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import firestore from '@react-native-firebase/firestore';
 
 const Results = ({navigation}) => {
-  const navigateDetails = (id, job) => {
+  const [bankData, setBankData] = useState([]);
+  const [results, setResults] = useState([]);
+  const [userID, setUserID] = useState('');
+
+  const navigateDetails = (userID, id, name, description, duedate) => {
     navigation.navigate('ResultsDetail', {
+      userID: userID,
       id: id,
-      job: job,
+      name: name,
+      description: description,
+      duedate: duedate,
     });
   };
 
-  const bankData = [
-    {
-      id: 1,
-      jobName: 'Front-End Engineer',
-      jobDescription: 'Front-End Engineer',
-      jobApplyDueDate: '01 December 2021',
-    },
-    {
-      id: 2,
-      jobName: 'Back-End Engineer',
-      jobDescription: 'Back-End Engineer',
-      jobApplyDueDate: '02 December 2021',
-    },
-    {
-      id: 3,
-      jobName: 'Full-Stack Engineer',
-      jobDescription: 'Full-Stack Engineer',
-      jobApplyDueDate: '03 December 2021',
-    },
-    {
-      id: 4,
-      jobName: 'DevOps Engineer',
-      jobDescription: 'DevOps Engineer',
-      jobApplyDueDate: '04 December 2021',
-    },
-    {
-      id: 5,
-      jobName: 'AI Engineer',
-      jobDescription: 'AI Engineer',
-      jobApplyDueDate: '05 December 2021',
-    },
-  ];
-
-  const [jobs, setJobs] = useState([
-    {
-      id: 1,
-      jobName: 'Front-End Engineer',
-      jobDescription: 'Front-End Engineer',
-      jobApplyDueDate: '01 December 2021',
-    },
-    {
-      id: 2,
-      jobName: 'Back-End Engineer',
-      jobDescription: 'Back-End Engineer',
-      jobApplyDueDate: '02 December 2021',
-    },
-    {
-      id: 3,
-      jobName: 'Full-Stack Engineer',
-      jobDescription: 'Full-Stack Engineer',
-      jobApplyDueDate: '03 December 2021',
-    },
-    {
-      id: 4,
-      jobName: 'DevOps Engineer',
-      jobDescription: 'DevOps Engineer',
-      jobApplyDueDate: '04 December 2021',
-    },
-    {
-      id: 5,
-      jobName: 'AI Engineer',
-      jobDescription: 'AI Engineer',
-      jobApplyDueDate: '05 December 2021',
-    },
-  ]);
-
   const filterData = data => {
-    let currentJobs = [...jobs];
-    let newJobs = currentJobs.filter(job => job.jobName === data);
+    let currentJobs = [...results];
+    let newJobs = currentJobs.filter(interview => interview.job.name === data);
     if (newJobs.length > 0) {
-      setJobs(newJobs);
+      setResults(newJobs);
     } else {
-      setJobs(bankData);
+      setResults(bankData);
     }
   };
+
+  const getData = async () => {
+    try {
+      const value = await AsyncStorage.getItem('uid');
+      if (value !== null) {
+        // value previously stored
+        // console.log(value);
+        setUserID(value);
+        getInterviews(value);
+      }
+    } catch (e) {
+      // error reading value
+      console.log(e);
+    }
+  };
+
+  const getInterviews = async userID => {
+    var snapshot = await firestore()
+      .collection('interviews')
+      .where('user.id', '==', userID)
+      .where('status', '==', 'Waiting For Review')
+      .onSnapshot(querySnapshot => {
+        const list = [];
+        querySnapshot.forEach(doc => {
+          const {job, result, status, user, video, applyDate} = doc.data();
+          list.push({
+            id: doc.id,
+            user: user,
+            job: job,
+            result: result,
+            status: status,
+            video: video,
+            applyDate: applyDate,
+          });
+          console.log(list);
+        });
+        console.log(list);
+        setResults(list);
+        setBankData(list);
+      });
+  };
+
+  useEffect(() => {
+    getData();
+    // getInterviews(userID);
+  }, []);
 
   return (
     <SafeAreaView style={{flex: 1}}>
@@ -118,15 +107,23 @@ const Results = ({navigation}) => {
       </Layout>
       <ScrollView>
         <Layout style={{padding: 10}}>
-          {jobs &&
-            jobs.map(job => {
+          {results &&
+            results.map(result => {
               return (
                 <Cards
-                  key={job.id}
+                  key={result.job.id}
                   type="results"
-                  move={() => navigateDetails(job.id, job.jobName)}
-                  jobName={job.jobName}
-                  jobApplyDueDate={job.jobApplyDueDate}
+                  move={() =>
+                    navigateDetails(
+                      result.user.id,
+                      result.job.id,
+                      result.job.name,
+                      result.job.description,
+                      result.job.duedate,
+                    )
+                  }
+                  jobName={result.job.name}
+                  jobApplyDueDate={Date(result.job.duedate.seconds)}
                 />
               );
             })}

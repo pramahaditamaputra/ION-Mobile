@@ -7,8 +7,9 @@ import {utils} from '@react-native-firebase/app';
 import storage from '@react-native-firebase/storage';
 import firestore from '@react-native-firebase/firestore';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {set} from 'react-native-reanimated';
+// import {set} from 'react-native-reanimated';
 import Gap from '../components/Gap';
+import {v4 as uuidv4} from 'uuid';
 
 const PendingView = props => (
   <Layout
@@ -24,11 +25,13 @@ const PendingView = props => (
   </Layout>
 );
 
-const RecordInterview = ({navigation}) => {
+const RecordInterview = ({route, navigation}) => {
   const navigateBack = () => {
     Tts.stop();
     navigation.goBack();
   };
+
+  const {id} = route.params;
 
   const [isLoading, setIsLoading] = useState(false);
   const [progress, setProgress] = useState(0);
@@ -50,6 +53,7 @@ const RecordInterview = ({navigation}) => {
   };
 
   const startRecording = async camera => {
+    let IDV4 = uuidv4();
     // default to mp4 for android as codec is not set
     console.log('Start Recording');
     setIsReady(true);
@@ -70,7 +74,7 @@ const RecordInterview = ({navigation}) => {
       uri,
     });
     //Set FileName
-    let reference = storage().ref(`/videos/${uid}`);
+    let reference = storage().ref(`/videos/${IDV4}`);
     //Upload File
     let task = reference.putFile(uri);
     task.on('state_changed', taskSnapshot => {
@@ -84,10 +88,37 @@ const RecordInterview = ({navigation}) => {
       //   }% transferred out of ${taskSnapshot.totalBytes}`,
       // );
     });
-    task.then(() => {
-      setIsLoading(false);
-      console.log('Video uploaded to the bucket!');
-      navigation.replace('MainApp');
+    task.then(async () => {
+      const url = await storage().ref(`/videos/${IDV4}`).getDownloadURL();
+      firestore()
+        .collection('interviews')
+        .where('user.id', '==', uid)
+        .where('job.id', '==', id)
+        .get()
+        .then(querySnapshot => {
+          console.log('Total users: ', querySnapshot.size);
+
+          querySnapshot.forEach(documentSnapshot => {
+            // console.log(
+            //   'User ID: ',
+            //   documentSnapshot.id,
+            //   documentSnapshot.data(),
+            // );
+            firestore()
+              .collection('interviews')
+              .doc(documentSnapshot.id)
+              .update({
+                status: 'Waiting For Review',
+                video: url,
+              })
+              .then(() => {
+                console.log('User updated!');
+                setIsLoading(false);
+                console.log('Video uploaded to the bucket!');
+                navigation.replace('MainApp');
+              });
+          });
+        });
     });
   };
 
