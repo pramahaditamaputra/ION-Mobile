@@ -193,7 +193,7 @@ const RecordInterview = ({route, navigation}) => {
     setIsReady(false);
     setQuestionCounter(0);
     Tts.speak(
-      'Hello, my name is sam. i will be your interviewer for today. are you ready?',
+      'Hello, my name is sam. i will be your interviewer for today. please move your face into camera. and press the ready button if you are ready.',
     );
   }, []);
 
@@ -216,6 +216,7 @@ const RecordInterview = ({route, navigation}) => {
       }}>
       {({camera, status, recordAudioPermissionStatus}) => {
         if (isLoading === true) return <PendingView progress={progress} />;
+
         return (
           <Layout
             style={{
@@ -230,7 +231,8 @@ const RecordInterview = ({route, navigation}) => {
                   {isReady === false ? (
                     <Text category="h4">
                       Hello, my name is sam. i will be your interviewer for
-                      today. are you ready?
+                      today. please move your face into camera. and press the
+                      ready button if you are ready.
                     </Text>
                   ) : (
                     <Text category="h4">
@@ -245,6 +247,21 @@ const RecordInterview = ({route, navigation}) => {
                 </Text>
               )}
             </Layout>
+
+            {isReady === false && (
+              <Layout
+                style={{
+                  minHeight: 400,
+                  minWidth: '100%',
+                  backgroundColor: 'transparent',
+                }}>
+                <LottieView
+                  source={require('./../assets/images/camera.json')}
+                  autoPlay
+                  loop
+                />
+              </Layout>
+            )}
 
             <Layout
               style={{
