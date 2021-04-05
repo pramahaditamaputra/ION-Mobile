@@ -18,6 +18,7 @@ import {
   Text,
   TopNavigationAction,
   Datepicker,
+  Spinner,
 } from '@ui-kitten/components';
 import Logo from '../assets/images/register.svg';
 import Gap from '../components/Gap';
@@ -27,13 +28,38 @@ import {utils} from '@react-native-firebase/app';
 import RNFetchBlob from 'rn-fetch-blob';
 import * as RNFS from 'react-native-fs';
 import firestore from '@react-native-firebase/firestore';
+import LottieView from 'lottie-react-native';
+import {showMessage, hideMessage} from 'react-native-flash-message';
 
 const CalendarIcon = props => <Icon {...props} name="calendar" />;
+
+const PendingView = props => (
+  <Layout
+    style={{
+      flex: 1,
+      backgroundColor: '#FFF',
+      justifyContent: 'center',
+      alignItems: 'center',
+    }}>
+    <Layout style={{minHeight: 200, minWidth: 200}}>
+      <LottieView
+        source={require('./../assets/images/register.json')}
+        autoPlay
+        loop
+      />
+    </Layout>
+    <Spinner size="giant" />
+    <Gap height={20} />
+    <Text style={{color: 'black'}}>Registering Data ...</Text>
+  </Layout>
+);
 
 const Register = ({navigation}) => {
   const navigateBack = () => {
     navigation.goBack();
   };
+
+  const [isLoading, setIsLoading] = useState(false);
 
   const [date, setDate] = React.useState(new Date());
   const [cv, setCV] = React.useState('');
@@ -158,6 +184,7 @@ const Register = ({navigation}) => {
   );
 
   const signUp = () => {
+    setIsLoading(true);
     auth()
       .createUserWithEmailAndPassword(email, password)
       .then(res => {
@@ -191,7 +218,17 @@ const Register = ({navigation}) => {
             email: email,
             cv: url,
           };
-          firestore().collection('candidates').add(data).then(moveToLogin());
+          firestore()
+            .collection('candidates')
+            .add(data)
+            .then(
+              setIsLoading(false),
+              showMessage({
+                message: 'Register Success, Welcome ...',
+                type: 'success',
+              }),
+              moveToLogin(),
+            );
         });
       })
       .catch(error => {
@@ -206,6 +243,8 @@ const Register = ({navigation}) => {
         console.error(error);
       });
   };
+
+  if (isLoading === true) return <PendingView />;
 
   return (
     <SafeAreaView style={{flex: 1}}>

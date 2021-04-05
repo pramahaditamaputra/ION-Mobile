@@ -10,18 +10,47 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 // import {set} from 'react-native-reanimated';
 import Gap from '../components/Gap';
 import {v4 as uuidv4} from 'uuid';
+import LottieView from 'lottie-react-native';
 
 const PendingView = props => (
   <Layout
     style={{
       flex: 1,
-      backgroundColor: 'lightgreen',
+      backgroundColor: '#FFF',
       justifyContent: 'center',
       alignItems: 'center',
     }}>
+    <Layout style={{minHeight: 200, minWidth: 200}}>
+      <LottieView
+        source={require('./../assets/images/upload.json')}
+        autoPlay
+        loop
+      />
+    </Layout>
     <Spinner size="giant" />
     <Gap height={10} />
-    <Text>{props.progress}%</Text>
+    <Text style={{color: 'black'}}>{props.progress}%</Text>
+  </Layout>
+);
+
+const StartView = props => (
+  <Layout
+    style={{
+      flex: 1,
+      backgroundColor: '#FFF',
+      justifyContent: 'center',
+      alignItems: 'center',
+    }}>
+    <Layout style={{minHeight: 200, minWidth: 200}}>
+      <LottieView
+        source={require('./../assets/images/camera.json')}
+        autoPlay
+        loop
+      />
+    </Layout>
+    <Spinner size="giant" />
+    <Gap height={10} />
+    <Text style={{color: 'black'}}>{props.progress}%</Text>
   </Layout>
 );
 

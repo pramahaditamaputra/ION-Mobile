@@ -38,13 +38,37 @@ import {
   Layout,
   TopNavigation,
   Text,
+  Spinner,
 } from '@ui-kitten/components';
 import Logo from '../assets/images/login.svg';
 import Gap from '../components/Gap';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {showMessage, hideMessage} from 'react-native-flash-message';
+import LottieView from 'lottie-react-native';
+
+const PendingView = props => (
+  <Layout
+    style={{
+      flex: 1,
+      backgroundColor: '#FFF',
+      justifyContent: 'center',
+      alignItems: 'center',
+    }}>
+    <Layout style={{minHeight: 200, minWidth: 200}}>
+      <LottieView
+        source={require('./../assets/images/login.json')}
+        autoPlay
+        loop
+      />
+    </Layout>
+    <Spinner size="giant" />
+    <Gap height={20} />
+    <Text style={{color: 'black'}}>Login ...</Text>
+  </Layout>
+);
 const Login = ({navigation}) => {
   // Set an initializing state whilst Firebase connects
+  const [isLoading, setIsLoading] = useState(false);
   const [initializing, setInitializing] = useState(true);
   const [user, setUser] = useState();
   const [email, setEmail] = React.useState('');
@@ -89,6 +113,7 @@ const Login = ({navigation}) => {
   }, []);
 
   const signIn = () => {
+    setIsLoading(true);
     auth()
       .signInWithEmailAndPassword(email, password)
       .then(() => {
@@ -96,6 +121,7 @@ const Login = ({navigation}) => {
           message: 'Welcome ...',
           type: 'success',
         });
+        setIsLoading(false);
         console.log('User signed in');
       })
       .catch(error => {
@@ -114,6 +140,8 @@ const Login = ({navigation}) => {
   const moveToRegister = () => {
     navigation.replace('Register');
   };
+
+  if (isLoading === true) return <PendingView />;
 
   if (initializing) return null;
 
