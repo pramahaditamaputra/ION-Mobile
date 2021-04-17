@@ -46,7 +46,7 @@ const Cards = props => {
         <Layout style={{flexDirection: 'row', alignItems: 'center'}}>
           <Avatar source={require('../assets/images/icon.png')} />
           <Layout style={{flex: 1, justifyContent: 'center', marginLeft: 10}}>
-            <Text category="s1">{props.jobName}</Text>
+            <Text category="p1">{props.jobName}</Text>
             <Text category="p2" appearance="hint">
               Due Date Interview : {props.jobApplyDueDate}
             </Text>
@@ -65,7 +65,7 @@ const Cards = props => {
         <Layout style={{flexDirection: 'row', alignItems: 'center'}}>
           <Avatar source={require('../assets/images/icon.png')} />
           <Layout style={{flex: 1, justifyContent: 'center', marginLeft: 10}}>
-            <Text category="s1">{props.jobName}</Text>
+            <Text category="p1">{props.jobName}</Text>
             <Text category="p2" appearance="hint">
               Announcement Date : {props.jobApplyDueDate}
             </Text>
@@ -83,7 +83,7 @@ const Cards = props => {
       <Layout style={{flexDirection: 'row', alignItems: 'center'}}>
         <Avatar source={require('../assets/images/icon.png')} />
         <Layout style={{flex: 1, justifyContent: 'center', marginLeft: 10}}>
-          <Text category="s1">{props.jobName}</Text>
+          <Text category="p1">{props.jobName}</Text>
           <Text category="p2" appearance="hint">
             Due Date Apply : {props.jobApplyDueDate}
           </Text>

@@ -1,6 +1,6 @@
 import {Button, Layout, Spinner, Text} from '@ui-kitten/components';
 import React, {useEffect, useState} from 'react';
-import {StyleSheet, View} from 'react-native';
+import {SafeAreaView, StyleSheet, View} from 'react-native';
 import {RNCamera} from 'react-native-camera';
 import Tts from 'react-native-tts';
 import {utils} from '@react-native-firebase/app';
@@ -11,6 +11,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import Gap from '../components/Gap';
 import {v4 as uuidv4} from 'uuid';
 import LottieView from 'lottie-react-native';
+import 'react-native-get-random-values';
 
 const PendingView = props => (
   <Layout
@@ -86,7 +87,7 @@ const RecordInterview = ({route, navigation}) => {
     // default to mp4 for android as codec is not set
     console.log('Start Recording');
     setIsReady(true);
-    Tts.speak('Please press the start button to start the interview.');
+    Tts.speak('Silahkan tekan tombol START untuk memulai sesi interview anda.');
     // Tts.speak(bankQuestion[questionCounter].question);
     // setQuestionCounter(questionCounter + 1);
     const {uri, codec = 'mp4'} = await camera.recordAsync({
@@ -192,8 +193,13 @@ const RecordInterview = ({route, navigation}) => {
     setIsInterviewStart(false);
     setIsReady(false);
     setQuestionCounter(0);
+    Tts.setDefaultLanguage('id-ID');
+    Tts.setDefaultVoice('com.apple.ttsbundle.Damayanti-compact');
+    Tts.addEventListener('tts-start', event => console.log('start', event));
+    Tts.addEventListener('tts-finish', event => console.log('finish', event));
+    Tts.addEventListener('tts-cancel', event => console.log('cancel', event));
     Tts.speak(
-      'Hello, my name is sam. i will be your interviewer for today. please move your face into camera. and press the ready button if you are ready.',
+      'Halo!, perkenalkan saya DIKA. Saya akan menjadi pewawancara kerja anda pada hari ini. Silahkan arahkan wajah anda tepat pada kotak wajah. Lalu tekan tombol Ready jika sudah siap!',
     );
   }, []);
 
@@ -218,91 +224,100 @@ const RecordInterview = ({route, navigation}) => {
         if (isLoading === true) return <PendingView progress={progress} />;
 
         return (
-          <Layout
-            style={{
-              padding: 10,
-              flex: 1,
-              backgroundColor: 'transparent',
-              justifyContent: 'space-between',
-            }}>
-            <Layout style={{padding: 10, borderRadius: 10}}>
-              {isInterviewStart === false ? (
-                <>
-                  {isReady === false ? (
-                    <Text category="h4">
-                      Hello, my name is sam. i will be your interviewer for
-                      today. please move your face into camera. and press the
-                      ready button if you are ready.
-                    </Text>
-                  ) : (
-                    <Text category="h4">
-                      Please press the start button to start the interview.
-                    </Text>
-                  )}
-                </>
-              ) : (
-                <Text category="h4">
-                  {questionCounter > 0 &&
-                    bankQuestion[questionCounter - 1].question}
-                </Text>
-              )}
-            </Layout>
-
-            {isReady === false && (
-              <Layout
-                style={{
-                  minHeight: 400,
-                  minWidth: '100%',
-                  backgroundColor: 'transparent',
-                }}>
-                <LottieView
-                  source={require('./../assets/images/camera.json')}
-                  autoPlay
-                  loop
-                />
-              </Layout>
-            )}
-
+          <SafeAreaView style={{flex: 1}}>
             <Layout
               style={{
-                flexDirection: 'row',
+                padding: 10,
+                flex: 1,
                 backgroundColor: 'transparent',
                 justifyContent: 'space-between',
               }}>
-              {isReady === false ? (
-                <>
-                  <Button onPress={() => startRecording(camera)}>
-                    <Text style={{color: 'white'}}> Ready </Text>
-                  </Button>
-                  <Button onPress={navigateBack}>
-                    <Text style={{color: 'white'}}> Not Ready </Text>
-                  </Button>
-                </>
-              ) : (
-                <>
-                  {isInterviewStart === false ? (
-                    <Button onPress={nextQuestion}>
-                      <Text style={{color: 'white'}}>Start Interview</Text>
-                    </Button>
-                  ) : (
-                    <>
-                      {questionCounter > bankQuestion.length - 1 ? (
-                        <Button onPress={() => stopRecording(camera)}>
-                          <Text style={{color: 'white'}}> End Interview </Text>
-                        </Button>
-                      ) : (
-                        <>
-                          <Button onPress={nextQuestion}>
-                            <Text style={{color: 'white'}}>Next Question</Text>
-                          </Button>
-                        </>
-                      )}
-                    </>
-                  )}
-                </>
+              <Layout style={{padding: 10, borderRadius: 10}}>
+                {isInterviewStart === false ? (
+                  <>
+                    {isReady === false ? (
+                      <Text category="p1">
+                        Halo!, perkenalkan saya DIKA. Saya akan menjadi
+                        pewawancara kerja anda pada hari ini. Silahkan arahkan
+                        wajah anda tepat pada kotak wajah. Lalu tekan tombol
+                        READY jika sudah siap!
+                      </Text>
+                    ) : (
+                      <Text category="p1">
+                        Silahkan tekan tombol START untuk memulai sesi interview
+                        anda.
+                      </Text>
+                    )}
+                  </>
+                ) : (
+                  <Text category="p1">
+                    {questionCounter > 0 &&
+                      bankQuestion[questionCounter - 1].question}
+                  </Text>
+                )}
+              </Layout>
+
+              {isReady === false && (
+                <Layout
+                  style={{
+                    minHeight: 400,
+                    minWidth: '100%',
+                    backgroundColor: 'transparent',
+                  }}>
+                  <LottieView
+                    source={require('./../assets/images/camera.json')}
+                    autoPlay
+                    loop
+                  />
+                </Layout>
               )}
+
+              <Layout
+                style={{
+                  flexDirection: 'row',
+                  backgroundColor: 'transparent',
+                  justifyContent: 'space-between',
+                }}>
+                {isReady === false ? (
+                  <>
+                    <Button onPress={() => startRecording(camera)}>
+                      <Text style={{color: 'white'}}> Ready </Text>
+                    </Button>
+                    <Button onPress={navigateBack}>
+                      <Text style={{color: 'white'}}> Not Ready </Text>
+                    </Button>
+                  </>
+                ) : (
+                  <>
+                    {isInterviewStart === false ? (
+                      <Button onPress={nextQuestion}>
+                        <Text style={{color: 'white'}}>Start Interview</Text>
+                      </Button>
+                    ) : (
+                      <>
+                        {questionCounter > bankQuestion.length - 1 ? (
+                          <Button onPress={() => stopRecording(camera)}>
+                            <Text style={{color: 'white'}}>
+                              {' '}
+                              End Interview{' '}
+                            </Text>
+                          </Button>
+                        ) : (
+                          <>
+                            <Button onPress={nextQuestion}>
+                              <Text style={{color: 'white'}}>
+                                Next Question
+                              </Text>
+                            </Button>
+                          </>
+                        )}
+                      </>
+                    )}
+                  </>
+                )}
+              </Layout>
             </Layout>
-          </Layout>
+          </SafeAreaView>
         );
       }}
     </RNCamera>

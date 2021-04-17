@@ -12,6 +12,7 @@ import SearchInput from '../components/SearchInput';
 import Cards from '../components/Cards';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import firestore from '@react-native-firebase/firestore';
+import Gap from '../components/Gap';
 
 const Jobs = ({navigation}) => {
   const [bankData, setBankData] = useState([]);
@@ -77,50 +78,56 @@ const Jobs = ({navigation}) => {
   }, []);
 
   return (
-    <SafeAreaView style={{flex: 1}}>
+    <>
       <Layout
         style={{
           padding: 10,
           paddingBottom: 20,
           backgroundColor: '#6155a6',
-          height: 175,
+          height: 200,
           flexDirection: 'column',
           justifyContent: 'space-evenly',
           borderBottomLeftRadius: 25,
           borderBottomRightRadius: 25,
         }}>
-        <Text style={styles.text} category="h1">
-          Jobs
-        </Text>
-        <Text style={styles.text} category="h6">
-          Find your dream job
-        </Text>
-        <SearchInput onFilter={data => filterData(data)} />
+        <SafeAreaView>
+          <Text style={styles.text} category="h3">
+            Jobs
+          </Text>
+          <Gap height={10} />
+          <Text style={styles.text} category="s2">
+            Find your dream job
+          </Text>
+          <Gap height={20} />
+          <SearchInput onFilter={data => filterData(data)} />
+        </SafeAreaView>
       </Layout>
-      <ScrollView>
-        <Layout style={{padding: 10}}>
-          {jobs &&
-            jobs.map(job => {
-              return (
-                <Cards
-                  key={job.id}
-                  move={() =>
-                    navigateDetails(
-                      userID,
-                      job.id,
-                      job.name,
-                      job.description,
-                      job.duedate.seconds,
-                    )
-                  }
-                  jobName={job.name}
-                  jobApplyDueDate={Date(job.duedate.seconds)}
-                />
-              );
-            })}
-        </Layout>
-      </ScrollView>
-    </SafeAreaView>
+      <SafeAreaView style={{flex: 1}}>
+        <ScrollView>
+          <Layout style={{padding: 10}}>
+            {jobs &&
+              jobs.map(job => {
+                return (
+                  <Cards
+                    key={job.id}
+                    move={() =>
+                      navigateDetails(
+                        userID,
+                        job.id,
+                        job.name,
+                        job.description,
+                        job.duedate.seconds,
+                      )
+                    }
+                    jobName={job.name}
+                    jobApplyDueDate={Date(job.duedate.seconds)}
+                  />
+                );
+              })}
+          </Layout>
+        </ScrollView>
+      </SafeAreaView>
+    </>
   );
 };
 

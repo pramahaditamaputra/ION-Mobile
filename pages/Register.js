@@ -247,67 +247,69 @@ const Register = ({navigation}) => {
   if (isLoading === true) return <PendingView />;
 
   return (
-    <SafeAreaView style={{flex: 1}}>
-      {/* <TopNavigation alignment="left" accessoryLeft={BackAction} /> */}
-      {/* <Divider /> */}
-      <Layout style={{flex: 1, padding: 25, justifyContent: 'center'}}>
-        <ScrollView showsVerticalScrollIndicator={false}>
-          <Layout style={{marginVertical: 65}}>
-            <Logo style={{maxWidth: '100%'}} height={175} />
-          </Layout>
-          <Input
-            size="large"
-            label="Fullname"
-            placeholder="Input Fullname"
-            value={fullname}
-            onChangeText={nextValue => setFullname(nextValue)}
-          />
-          <Gap height={10} />
-          <Datepicker
-            label="DOB"
-            placeholder="Pick Date"
-            date={dob}
-            onSelect={nextDate => setDob(nextDate)}
-            accessoryRight={CalendarIcon}
-          />
-          <Gap height={10} />
-          <Input
-            size="large"
-            label="Email"
-            placeholder="Input Email"
-            value={email}
-            onChangeText={nextValue => setEmail(nextValue)}
-          />
-          <Gap height={10} />
-          <Input
-            size="large"
-            value={password}
-            label="Password"
-            placeholder="Input Password"
-            accessoryRight={renderIcon}
-            secureTextEntry={secureTextEntry}
-            onChangeText={nextValue => setPassword(nextValue)}
-          />
-          <Gap height={10} />
-          <Layout
-            style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-            <Button size="small" onPress={getCV}>
-              Upload CV
-            </Button>
-            <Text>NamaFileCV.pdf</Text>
-          </Layout>
-          <Gap height={50} />
-          <Button onPress={signUp}>Register</Button>
-          <Layout
-            style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-            <Gap height={15} />
-            <TouchableOpacity onPress={moveToLogin}>
-              <Text appearance="hint">Already have an account? Sign In.</Text>
-            </TouchableOpacity>
-          </Layout>
-        </ScrollView>
-      </Layout>
-    </SafeAreaView>
+    <Layout style={{flex: 1}}>
+      <SafeAreaView style={{flex: 1}}>
+        {/* <TopNavigation alignment="left" accessoryLeft={BackAction} /> */}
+        {/* <Divider /> */}
+        <Layout style={{flex: 1, padding: 25, justifyContent: 'center'}}>
+          <ScrollView showsVerticalScrollIndicator={false}>
+            <Layout style={{marginVertical: 65}}>
+              <Logo style={{maxWidth: '100%'}} height={175} />
+            </Layout>
+            <Input
+              size="large"
+              label="Fullname"
+              placeholder="Input Fullname"
+              value={fullname}
+              onChangeText={nextValue => setFullname(nextValue)}
+            />
+            <Gap height={10} />
+            <Datepicker
+              label="DOB"
+              placeholder="Pick Date"
+              date={dob}
+              onSelect={nextDate => setDob(nextDate)}
+              accessoryRight={CalendarIcon}
+            />
+            <Gap height={10} />
+            <Input
+              size="large"
+              label="Email"
+              placeholder="Input Email"
+              value={email}
+              onChangeText={nextValue => setEmail(nextValue)}
+            />
+            <Gap height={10} />
+            <Input
+              size="large"
+              value={password}
+              label="Password"
+              placeholder="Input Password"
+              accessoryRight={renderIcon}
+              secureTextEntry={secureTextEntry}
+              onChangeText={nextValue => setPassword(nextValue)}
+            />
+            <Gap height={10} />
+            <Layout
+              style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+              <Button size="small" onPress={getCV}>
+                Upload CV
+              </Button>
+              <Text>NamaFileCV.pdf</Text>
+            </Layout>
+            <Gap height={50} />
+            <Button onPress={signUp}>Register</Button>
+            <Layout
+              style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+              <Gap height={15} />
+              <TouchableOpacity onPress={moveToLogin}>
+                <Text appearance="hint">Already have an account? Sign In.</Text>
+              </TouchableOpacity>
+            </Layout>
+          </ScrollView>
+        </Layout>
+      </SafeAreaView>
+    </Layout>
   );
 };
 

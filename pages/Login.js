@@ -147,43 +147,49 @@ const Login = ({navigation}) => {
 
   if (!user) {
     return (
-      <SafeAreaView style={{flex: 1}}>
-        <Layout style={{flex: 1, padding: 25, justifyContent: 'center'}}>
-          <ScrollView showsVerticalScrollIndicator={false}>
-            <Layout style={{marginVertical: 75}}>
-              <Logo style={{maxWidth: '100%'}} height={175} />
-            </Layout>
-            <Input
-              size="large"
-              label="Email"
-              placeholder="Input Email"
-              value={email}
-              onChangeText={nextValue => setEmail(nextValue)}
-            />
-            <Gap height={10} />
-            <Input
-              size="large"
-              value={password}
-              label="Password"
-              placeholder="Input Password"
-              accessoryRight={renderIcon}
-              secureTextEntry={secureTextEntry}
-              onChangeText={nextValue => setPassword(nextValue)}
-            />
-            <Gap height={50} />
-            <Button onPress={signIn}>Login</Button>
-            <Layout
-              style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-              <Gap height={15} />
-              <TouchableOpacity onPress={moveToRegister}>
-                <Text appearance="hint">
-                  Don't have an account yet? Sign Up.
-                </Text>
-              </TouchableOpacity>
-            </Layout>
-          </ScrollView>
-        </Layout>
-      </SafeAreaView>
+      <Layout style={{flex: 1}}>
+        <SafeAreaView style={{flex: 1}}>
+          <Layout style={{flex: 1, padding: 25, justifyContent: 'center'}}>
+            <ScrollView showsVerticalScrollIndicator={false}>
+              <Layout style={{marginVertical: 75}}>
+                <Logo style={{maxWidth: '100%'}} height={175} />
+              </Layout>
+              <Input
+                size="large"
+                label="Email"
+                placeholder="Input Email"
+                value={email}
+                onChangeText={nextValue => setEmail(nextValue)}
+              />
+              <Gap height={10} />
+              <Input
+                size="large"
+                value={password}
+                label="Password"
+                placeholder="Input Password"
+                accessoryRight={renderIcon}
+                secureTextEntry={secureTextEntry}
+                onChangeText={nextValue => setPassword(nextValue)}
+              />
+              <Gap height={50} />
+              <Button onPress={signIn}>Login</Button>
+              <Layout
+                style={{
+                  flex: 1,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}>
+                <Gap height={15} />
+                <TouchableOpacity onPress={moveToRegister}>
+                  <Text appearance="hint">
+                    Don't have an account yet? Sign Up.
+                  </Text>
+                </TouchableOpacity>
+              </Layout>
+            </ScrollView>
+          </Layout>
+        </SafeAreaView>
+      </Layout>
     );
   }
 

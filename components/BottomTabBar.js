@@ -8,7 +8,7 @@ import {
 
 const JobsIcon = props => <Icon {...props} name="briefcase-outline" />;
 const InterviewsIcon = props => <Icon {...props} name="people-outline" />;
-const ResultsIcon = props => <Icon {...props} name="file-text-outline" />;
+const ResultsIcon = props => <Icon {...props} name="bell-outline" />;
 const ProfileIcon = props => <Icon {...props} name="person-outline" />;
 
 const BottomTabBar = ({navigation, state}) => {
@@ -28,7 +28,7 @@ const BottomTabBar = ({navigation, state}) => {
 
 const styles = StyleSheet.create({
   bottomNavigation: {
-    // marginVertical: 8,
+    paddingVertical: 15,
     // activeBackgroundColor: 'tomato',
   },
 });

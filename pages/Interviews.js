@@ -12,6 +12,7 @@ import SearchInput from '../components/SearchInput';
 import Cards from '../components/Cards';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import firestore from '@react-native-firebase/firestore';
+import Gap from '../components/Gap';
 
 const Interviews = ({navigation}) => {
   const [bankData, setBankData] = useState([]);
@@ -85,51 +86,57 @@ const Interviews = ({navigation}) => {
   }, []);
 
   return (
-    <SafeAreaView style={{flex: 1}}>
+    <>
       <Layout
         style={{
           padding: 10,
           paddingBottom: 20,
           backgroundColor: '#6155a6',
-          height: 175,
+          height: 200,
           flexDirection: 'column',
           justifyContent: 'space-evenly',
           borderBottomLeftRadius: 25,
           borderBottomRightRadius: 25,
         }}>
-        <Text style={styles.text} category="h1">
-          Interviews
-        </Text>
-        <Text style={styles.text} category="h6">
-          Find your job interview
-        </Text>
-        <SearchInput onFilter={data => filterData(data)} />
+        <SafeAreaView>
+          <Text style={styles.text} category="h3">
+            Interviews
+          </Text>
+          <Gap height={10} />
+          <Text style={styles.text} category="s2">
+            Find your job interview
+          </Text>
+          <Gap height={20} />
+          <SearchInput onFilter={data => filterData(data)} />
+        </SafeAreaView>
       </Layout>
-      <ScrollView>
-        <Layout style={{padding: 10}}>
-          {interviews &&
-            interviews.map(interview => {
-              return (
-                <Cards
-                  key={interview.job.id}
-                  type="interviews"
-                  move={() =>
-                    navigateDetails(
-                      interview.user.id,
-                      interview.job.id,
-                      interview.job.name,
-                      interview.job.description,
-                      interview.job.duedate,
-                    )
-                  }
-                  jobName={interview.job.name}
-                  jobApplyDueDate={Date(interview.job.duedate.seconds)}
-                />
-              );
-            })}
-        </Layout>
-      </ScrollView>
-    </SafeAreaView>
+      <SafeAreaView style={{flex: 1}}>
+        <ScrollView>
+          <Layout style={{padding: 10}}>
+            {interviews &&
+              interviews.map(interview => {
+                return (
+                  <Cards
+                    key={interview.job.id}
+                    type="interviews"
+                    move={() =>
+                      navigateDetails(
+                        interview.user.id,
+                        interview.job.id,
+                        interview.job.name,
+                        interview.job.description,
+                        interview.job.duedate,
+                      )
+                    }
+                    jobName={interview.job.name}
+                    jobApplyDueDate={Date(interview.job.duedate.seconds)}
+                  />
+                );
+              })}
+          </Layout>
+        </ScrollView>
+      </SafeAreaView>
+    </>
   );
 };
 

@@ -56,10 +56,10 @@ const InterviewsDetail = ({route, navigation}) => {
           // borderBottomLeftRadius: 30,
           // borderBottomRightRadius: 300,
         }}>
-        <Text style={{color: 'white'}} category="h1">
+        <Text style={{color: 'white'}} category="h4">
           {name}
         </Text>
-        <Text style={{color: 'white'}} category="h6">
+        <Text style={{color: 'white'}} category="p1">
           Due Date Interview : {Date(duedate)}
         </Text>
         {/* <SearchInput onFilter={data => filterData(data)} /> */}
@@ -75,11 +75,11 @@ const InterviewsDetail = ({route, navigation}) => {
           borderTopRightRadius: 300,
         }}>
         <ScrollView>
-          <Text style={styles.text} category="h5">
+          <Text style={styles.text} category="h6">
             Job Requirements
           </Text>
           <Gap height={5} />
-          <Text style={styles.text} category="h6">
+          <Text style={styles.text} category="p1">
             {description}
           </Text>
           <Gap height={50} />

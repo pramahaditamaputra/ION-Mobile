@@ -5,9 +5,10 @@ import {EvaIconsPack} from '@ui-kitten/eva-icons';
 import Router from './routes/Router';
 import {NavigationContainer} from '@react-navigation/native';
 import {default as theme} from './custom-theme.json';
-import {LogBox} from 'react-native';
+import {LogBox, StatusBar} from 'react-native';
 import FlashMessage from 'react-native-flash-message';
 LogBox.ignoreAllLogs();
+StatusBar.setBarStyle('light-content', true);
 
 const App = () => (
   <NavigationContainer>
