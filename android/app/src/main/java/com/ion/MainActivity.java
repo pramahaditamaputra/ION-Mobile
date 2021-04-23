@@ -1,4 +1,4 @@
-package com.ion;
+package com.ion.walkin.juaracoding;
 
 import com.facebook.react.ReactActivity;
 
@@ -10,6 +10,6 @@ public class MainActivity extends ReactActivity {
    */
   @Override
   protected String getMainComponentName() {
-    return "ION";
+    return "WalkIn";
   }
 }

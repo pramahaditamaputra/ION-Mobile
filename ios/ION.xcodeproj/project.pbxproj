@@ -526,7 +526,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = org.reactjs.native.example.ION.WalkIn;
+				PRODUCT_BUNDLE_IDENTIFIER = com.ion.walkin.juaracoding;
 				PRODUCT_NAME = ION;
 				SWIFT_OBJC_BRIDGING_HEADER = "ION-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -554,7 +554,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = org.reactjs.native.example.ION.WalkIn;
+				PRODUCT_BUNDLE_IDENTIFIER = com.ion.walkin.juaracoding;
 				PRODUCT_NAME = ION;
 				SWIFT_OBJC_BRIDGING_HEADER = "ION-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
