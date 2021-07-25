@@ -44,7 +44,7 @@ const Interviews = ({navigation}) => {
       const value = await AsyncStorage.getItem('uid');
       if (value !== null) {
         // value previously stored
-        // console.log(value);
+        // console.log(value);....
         setUserID(value);
         getInterviews(value);
       }
